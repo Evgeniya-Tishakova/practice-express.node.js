@@ -5,7 +5,7 @@ export const getAllStudents = async () => {
   return students;
 };
 
-export const getStudentsId = async () => {
-  const student = await StudentsCollection.findById(student.Id);
+export const getStudentById = async (id) => {
+  const student = await StudentsCollection.findById(id);
   return student;
 };

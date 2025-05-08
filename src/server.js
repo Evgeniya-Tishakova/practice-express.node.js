@@ -6,7 +6,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { getEnvVar } from './utils/getEnvVar.js';
 import { getAllStudents } from './services/students.js';
-import { getStudentsId } from './services/students.js';
+import { getStudentById } from './services/students.js';
 
 dotenv.config();
 
@@ -26,14 +26,16 @@ export const startServer = () => {
     }),
   );
 
-  app.get('/students', async (req, res) => {
+  app.get('/api/students', async (req, res) => {
     const students = await getAllStudents();
 
     res.status(200).json({ data: students });
   });
 
-  app.get('/students/studentId', async (req, res) => {
-    const student = await getStudentsId();
+  app.get('/api/students/:studentId', async (req, res, next) => {
+    const { studentId } = req.params;
+    const student = await getStudentById(studentId);
+    console.log(student);
 
     if (!student) {
       res.status(404).json({

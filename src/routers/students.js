@@ -8,19 +8,38 @@ import {
   patchStudentController,
 } from '../controllers/students.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import {
+  createStudentSchema,
+  updateStudentSchema,
+} from '../validation/students.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import { isValidId } from '../middlewares/isValidId.js';
 
 const router = Router();
 
 router.get('/', ctrlWrapper(getStudentsController));
 
-router.get('/:studentId', ctrlWrapper(getStudentsByIdController));
+router.get('/:studentId', isValidId, ctrlWrapper(getStudentsByIdController));
 
-router.post('/', ctrlWrapper(createStudentController));
+router.post(
+  '/',
+  validateBody(createStudentSchema),
+  ctrlWrapper(createStudentController),
+);
 
-router.delete('/:studentId', ctrlWrapper(deleteStudentController));
+router.delete('/:studentId', isValidId, ctrlWrapper(deleteStudentController));
 
-router.put('/:studentId', ctrlWrapper(upsertStudentController));
+router.put(
+  '/:studentId',
+  validateBody(createStudentSchema),
+  ctrlWrapper(upsertStudentController),
+);
 
-router.patch('/:studentId', ctrlWrapper(patchStudentController));
+router.patch(
+  '/:studentId',
+  validateBody(updateStudentSchema),
+  isValidId,
+  ctrlWrapper(patchStudentController),
+);
 
 export default router;
